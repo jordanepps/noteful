@@ -1,22 +1,11 @@
 import React from 'react';
-import './NotesFolder.js';
+import './NotesFolder.css';
+
+import Note from '../Note/Note';
 
 export default function NotesFolder(props) {
-	// console.log(
-	// 	this.props.notesData.folders.find(
-	// 		folder => folder.name === this.props.match.params.folderId
-	// 	)
-	// );
-	const folder = props.notesData.folders.find(
-		folder => folder.name === props.folderId
-	);
 	const notes = props.notesData.notes
-		.filter(note => note.folderId === folder.id)
-		.map(note => (
-			<div key={note.id}>
-				<h2>{note.name}</h2>
-				<p>{note.content}</p>
-			</div>
-		));
-	return <div>{notes}</div>;
+		.filter(note => note.folderId === props.folderId)
+		.map(note => <Note key={note.id} note={note} />);
+	return <div className="folder-content">{notes}</div>;
 }

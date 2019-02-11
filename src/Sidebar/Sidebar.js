@@ -5,7 +5,7 @@ import './Sidebar.css';
 export default class Sidebar extends Component {
 	render() {
 		const folders = this.props.folders.map(folder => (
-			<Link key={folder.id} to={`/folder/${folder.name}`}>
+			<Link key={folder.id} to={`/folder/${folder.id}`}>
 				{folder.name}
 			</Link>
 		));

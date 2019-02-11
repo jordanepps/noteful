@@ -6,6 +6,7 @@ import STORE from './dummy-store';
 import Heading from './Heading/Heading';
 import Sidebar from './Sidebar/Sidebar';
 import NotesFolder from './NotesFolder/NotesFolder';
+import CurrentNote from './CurrentNote/CurrentNote';
 
 export default class App extends Component {
 	constructor(props) {
@@ -23,6 +24,15 @@ export default class App extends Component {
 						<NotesFolder
 							notesData={this.state.STORE}
 							folderId={props.match.params.folderId}
+						/>
+					)}
+				/>
+				<Route
+					path="/note/:noteId"
+					render={props => (
+						<CurrentNote
+							notesData={this.state.STORE}
+							noteId={props.match.params.noteId}
 						/>
 					)}
 				/>
