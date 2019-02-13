@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import './NoteTab.css';
 
 export default function NoteTab(props) {
-	console.log(props);
 	return (
 		<div>
 			<h2>

@@ -3,12 +3,12 @@ import { Switch, Route } from 'react-router-dom';
 import './App.css';
 
 import NotesContext from './NotesContext';
-import HomePage from './HomePage/HomePage';
 import Heading from './Heading/Heading';
-// import Sidebar from './Sidebar/Sidebar';
+import HomePage from './HomePage/HomePage';
+import FolderPage from './FolderPage/FolderPage';
 // import NoteTabContainer from './NoteTabContainer/NoteTabContainer';
 // import SelectedFolder from './SelectedFolder/SelectedFolder';
-// import SelectedNote from './SelectedNote/SelectedNote';
+import NotePage from './NotePage/NotePage';
 
 export default class App extends Component {
 	constructor(props) {
@@ -37,24 +37,14 @@ export default class App extends Component {
 				<NotesContext.Provider value={contextValue}>
 					<Switch>
 						<Route exact path="/" component={HomePage} />
-						{/* <Route
+						<Route
 							path="/folder/:folderId"
-							render={props => (
-								<SelectedFolder
-									notesData={this.state}
-									folderId={props.match.params.folderId}
-								/>
-							)}
+							render={props => <FolderPage {...props} />}
 						/>
 						<Route
 							path="/note/:noteId"
-							render={props => (
-								<SelectedNote
-									notesData={this.state}
-									noteId={props.match.params.noteId}
-								/>
-							)}
-						/> */}
+							render={props => <NotePage {...props} />}
+						/>
 					</Switch>
 				</NotesContext.Provider>
 			</div>
