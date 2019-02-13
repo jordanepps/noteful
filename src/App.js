@@ -1,41 +1,62 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import './App.css';
 
-import STORE from './dummy-store';
+import NotesContext from './NotesContext';
+import HomePage from './HomePage/HomePage';
 import Heading from './Heading/Heading';
-import Sidebar from './Sidebar/Sidebar';
-import NotesFolder from './NotesFolder/NotesFolder';
-import CurrentNote from './CurrentNote/CurrentNote';
+// import Sidebar from './Sidebar/Sidebar';
+// import NoteTabContainer from './NoteTabContainer/NoteTabContainer';
+// import SelectedFolder from './SelectedFolder/SelectedFolder';
+// import SelectedNote from './SelectedNote/SelectedNote';
 
 export default class App extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { STORE };
+		this.state = { notes: [], folders: [] };
 	}
+
+	componentDidMount() {
+		fetch('http://localhost:9090/folders')
+			.then(res => res.json())
+			.then(folders => this.setState({ folders }));
+		fetch('http://localhost:9090/notes')
+			.then(res => res.json())
+			.then(notes => this.setState({ notes }));
+	}
+
 	render() {
+		const { notes, folders } = this.state;
+		const contextValue = {
+			notes,
+			folders
+		};
 		return (
 			<div className="App">
 				<Heading />
-				<Sidebar folders={this.state.STORE.folders} />
-				<Route
-					path="/folder/:folderId"
-					render={props => (
-						<NotesFolder
-							notesData={this.state.STORE}
-							folderId={props.match.params.folderId}
+				<NotesContext.Provider value={contextValue}>
+					<Switch>
+						<Route exact path="/" component={HomePage} />
+						{/* <Route
+							path="/folder/:folderId"
+							render={props => (
+								<SelectedFolder
+									notesData={this.state}
+									folderId={props.match.params.folderId}
+								/>
+							)}
 						/>
-					)}
-				/>
-				<Route
-					path="/note/:noteId"
-					render={props => (
-						<CurrentNote
-							notesData={this.state.STORE}
-							noteId={props.match.params.noteId}
-						/>
-					)}
-				/>
+						<Route
+							path="/note/:noteId"
+							render={props => (
+								<SelectedNote
+									notesData={this.state}
+									noteId={props.match.params.noteId}
+								/>
+							)}
+						/> */}
+					</Switch>
+				</NotesContext.Provider>
 			</div>
 		);
 	}

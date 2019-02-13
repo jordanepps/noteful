@@ -7,6 +7,7 @@
 
 # testing
 /coverage
+/noteful-json-server
 
 # production
 /build

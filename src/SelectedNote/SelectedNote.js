@@ -1,15 +1,15 @@
 import React from 'react';
-import './CurrentNote.css';
+import './SelectedNote.css';
 
-import Note from '../Note/Note';
+import NoteTab from '../NoteTab/NoteTab';
 
-export default function CurrentNote(props) {
+export default function SelectedNote(props) {
 	const currentNote = props.notesData.notes.find(
 		note => note.id === props.noteId
 	);
 	return (
 		<div className="current-note">
-			<Note note={currentNote} />
+			<NoteTab note={currentNote} />
 			<p>{currentNote.content}</p>
 		</div>
 	);
