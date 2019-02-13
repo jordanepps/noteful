@@ -7,17 +7,30 @@ import NoteSidebar from '../NoteSidebar/NoteSidebar';
 
 export default class NotePage extends Component {
 	static contextType = NotesContext;
+	constructor(props) {
+		super(props);
+		this.filterNotes = this.filterNotes.bind(this);
+	}
 
-	filterNotes = note => {
+	filterNotes(note) {
 		return note.id === this.props.match.params.noteId;
-	};
+	}
+
+	handleGoBack() {
+		console.log('click');
+		this.props.history.goBack();
+	}
 
 	render() {
 		const { notes } = this.context;
 		const currentNote = notes.find(this.filterNotes);
+		console.log(currentNote.folderId);
 		return (
 			<Fragment>
-				<NoteSidebar />
+				<NoteSidebar
+					goBack={() => this.handleGoBack()}
+					currentFolderId={currentNote.folderId}
+				/>
 				<div className="current-note">
 					<NoteTab note={currentNote} />
 					<p>{currentNote.content}</p>
