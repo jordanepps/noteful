@@ -2,13 +2,11 @@ import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import './App.css';
 
-import NotesContext from './NotesContext';
-import Heading from './Heading/Heading';
-import HomePage from './HomePage/HomePage';
-import FolderPage from './FolderPage/FolderPage';
-// import NoteTabContainer from './NoteTabContainer/NoteTabContainer';
-// import SelectedFolder from './SelectedFolder/SelectedFolder';
-import NotePage from './NotePage/NotePage';
+import NotesContext from '../NotesContext';
+import Heading from '../Heading/Heading';
+import HomePage from '../HomePage/HomePage';
+import FolderPage from '../FolderPage/FolderPage';
+import NotePage from '../NotePage/NotePage';
 
 export default class App extends Component {
 	constructor(props) {
