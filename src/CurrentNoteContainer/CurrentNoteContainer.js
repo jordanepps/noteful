@@ -8,16 +8,24 @@ import NoteTab from '../NoteTab/NoteTab';
 export default class CurrentNoteContainer extends Component {
 	static contextType = NotesContext;
 	static defaultProps = {
-		currentNoteId: ''
+		currentNoteId: '',
+		history: {}
 	};
 
-	renderNoteData(notes) {
+	handleDeleteNote(history) {
+		history.push('/');
+	}
+
+	renderNoteData(notes, history) {
 		const currentNote = notes.find(
 			note => note.id === this.props.currentNoteId
 		);
 		const element = currentNote ? (
 			<Fragment>
-				<NoteTab note={currentNote} />
+				<NoteTab
+					note={currentNote}
+					handleDeleteNote={() => this.handleDeleteNote(history)}
+				/>
 				<p>{currentNote.content}</p>
 			</Fragment>
 		) : (
@@ -28,6 +36,9 @@ export default class CurrentNoteContainer extends Component {
 
 	render() {
 		const { notes } = this.context;
-		return <div className="current-note">{this.renderNoteData(notes)}</div>;
+		const { history } = this.props;
+		return (
+			<div className="current-note">{this.renderNoteData(notes, history)}</div>
+		);
 	}
 }

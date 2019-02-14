@@ -6,10 +6,20 @@ import NotesContext from '../NotesContext';
 
 export default class NoteTabContainer extends Component {
 	static contextType = NotesContext;
-	static defaultProps = { currentFolder: null };
+	static defaultProps = { currentFolder: {}, history: {} };
 
-	createNoteTabs = note => {
-		return <NoteTab key={note.id} note={note} />;
+	handleDeleteNote() {
+		this.props.history.push('/');
+	}
+
+	createNoteTabs = (note, history) => {
+		return (
+			<NoteTab
+				key={note.id}
+				note={note}
+				handleDeleteNote={() => this.handleDeleteNote(history)}
+			/>
+		);
 	};
 
 	filterNoteTabs = note => {
@@ -18,10 +28,11 @@ export default class NoteTabContainer extends Component {
 
 	render() {
 		const { notes } = this.context;
-		const { currentFolder } = this.props;
-		const tabs = currentFolder
-			? notes.filter(this.filterNoteTabs).map(this.createNoteTabs)
-			: notes.map(this.createNoteTabs);
+		const { currentFolder, history } = this.props;
+		const tabs =
+			Object.keys(currentFolder).length !== 0
+				? notes.filter(this.filterNoteTabs).map(this.createNoteTabs)
+				: notes.map(note => this.createNoteTabs(note, history));
 		return <div className="note-tab-container">{tabs}</div>;
 	}
 }

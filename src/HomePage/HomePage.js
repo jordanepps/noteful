@@ -9,7 +9,7 @@ export default class HomePage extends Component {
 		return (
 			<Fragment>
 				<Sidebar />
-				<NoteTabContainer />
+				<NoteTabContainer history={this.props.history} />
 			</Fragment>
 		);
 	}

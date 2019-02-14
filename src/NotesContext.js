@@ -1,8 +1,9 @@
 import { createContext } from 'react';
 
 const NotesContext = createContext({
-	notes: null,
-	folders: null
+	notes: [],
+	folders: [],
+	deleteNote: () => {}
 });
 
 export default NotesContext;

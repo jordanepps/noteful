@@ -20,7 +20,10 @@ export default class NotePage extends Component {
 					currentNoteId={currentNoteId}
 				/>
 
-				<CurrentNoteContainer currentNoteId={currentNoteId} />
+				<CurrentNoteContainer
+					currentNoteId={currentNoteId}
+					history={this.props.history}
+				/>
 			</Fragment>
 		);
 	}

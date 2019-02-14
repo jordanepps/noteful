@@ -10,7 +10,10 @@ export default class FolderPage extends Component {
 		return (
 			<Fragment>
 				<Sidebar currentFolder={currentFolderId} />
-				<NoteTabContainer currentFolder={currentFolderId} />
+				<NoteTabContainer
+					currentFolder={currentFolderId}
+					history={this.props.history}
+				/>
 			</Fragment>
 		);
 	}
