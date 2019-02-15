@@ -7,6 +7,7 @@ import Heading from '../Heading/Heading';
 import HomePage from '../HomePage/HomePage';
 import FolderPage from '../FolderPage/FolderPage';
 import NotePage from '../NotePage/NotePage';
+import AddNote from '../AddNote/AddNote';
 
 export default class App extends Component {
 	constructor(props) {
@@ -50,6 +51,7 @@ export default class App extends Component {
 							path="/note/:noteId"
 							render={props => <NotePage {...props} />}
 						/>
+						<Route path="/add-note" component={AddNote} />
 					</Switch>
 				</NotesContext.Provider>
 			</div>

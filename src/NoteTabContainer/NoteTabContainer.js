@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import './NoteTabContainer.css';
 
 import NoteTab from '../NoteTab/NoteTab';
@@ -33,6 +34,13 @@ export default class NoteTabContainer extends Component {
 			Object.keys(currentFolder).length !== 0
 				? notes.filter(this.filterNoteTabs).map(this.createNoteTabs)
 				: notes.map(note => this.createNoteTabs(note, history));
-		return <div className="note-tab-container">{tabs}</div>;
+		return (
+			<div className="note-tab-container">
+				<button>
+					<Link to="/add-note">Add Note</Link>
+				</button>
+				{tabs}
+			</div>
+		);
 	}
 }
