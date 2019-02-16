@@ -16,12 +16,16 @@ export default class App extends Component {
 	}
 
 	componentDidMount() {
-		fetch('http://localhost:9090/folders')
-			.then(res => res.json())
-			.then(folders => this.setState({ folders }));
-		fetch('http://localhost:9090/notes')
-			.then(res => res.json())
-			.then(notes => this.setState({ notes }));
+		const folderReq = fetch('http://localhost:9090/folders');
+		const noteReq = fetch('http://localhost:9090/notes');
+		Promise.all([folderReq, noteReq])
+			.then(responses => Promise.all(responses.map(res => res.json())))
+			.then(([folders, notes]) =>
+				this.setState({
+					folders,
+					notes
+				})
+			);
 	}
 
 	handleDeleteNote = noteId => {
