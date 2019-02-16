@@ -24,12 +24,8 @@ export default class AddNote extends Component {
 		};
 	}
 
-	//NOTE OBJECT EXAMPLE
-	// id: "d26e0034-ffaf-11e8-8eb2-f2801f1b9fd1",
-	// name: "Cats",
-	// modified: "2018-08-15T23:00:00.000Z",
-	// folderId: "b07161a6-ffaf-11e8-8eb2-f2801f1b9fd1",
-	// content: "Saepe sed saepe. Voluptas beatae incidunt."
+	//TODO:Let user know if addNote was successful or not
+	//TODO:add a error catch if user submits with missing input
 
 	handleFormSubmit(e) {
 		e.preventDefault();
@@ -41,6 +37,9 @@ export default class AddNote extends Component {
 			},
 			body: this.createJsonNoteObject({ name, content, folderId })
 		})
+			// .then(() => {
+			// 	throw new Error('Something went wrong');
+			// })
 			.then(res => res.json())
 			.then(() => {
 				this.context.fetchNotes();
@@ -50,7 +49,7 @@ export default class AddNote extends Component {
 
 	createJsonNoteObject({ name, content, folderId }) {
 		const newNote = {
-			name,
+			// name,
 			folderId,
 			content,
 			modified: this.updateModifiedTimeStamp()

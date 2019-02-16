@@ -36,9 +36,7 @@ export default class NoteTabContainer extends Component {
 				: notes.map(note => this.createNoteTabs(note, history));
 		return (
 			<div className="note-tab-container">
-				<button>
-					<Link to="/add-note">Add Note</Link>
-				</button>
+				<Link to="/add-note">Add Note</Link>
 				{tabs}
 			</div>
 		);
