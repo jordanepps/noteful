@@ -21,6 +21,7 @@ export default class NoteTab extends Component {
 			.then(() => {
 				this.context.deleteNote(noteId);
 				this.props.handleDeleteNote();
+				this.context.fetchNotes();
 			});
 	}
 	render() {

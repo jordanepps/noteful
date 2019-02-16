@@ -32,18 +32,20 @@ export default class App extends Component {
 			);
 	}
 
-	handleDeleteNote = noteId => {
+	handleDeleteNote(noteId) {
 		this.setState({
 			notes: this.state.notes.filter(note => note.id !== noteId)
 		});
-	};
+	}
 
 	render() {
 		const { notes, folders } = this.state;
 		const contextValue = {
 			notes,
 			folders,
-			deleteNote: this.handleDeleteNote,
+			deleteNote: () => {
+				this.handleDeleteNote();
+			},
 			fetchNotes: () => {
 				this.fetchNoteData();
 			}
