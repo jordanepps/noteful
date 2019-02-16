@@ -16,6 +16,10 @@ export default class App extends Component {
 	}
 
 	componentDidMount() {
+		this.fetchNoteData();
+	}
+
+	fetchNoteData() {
 		const folderReq = fetch('http://localhost:9090/folders');
 		const noteReq = fetch('http://localhost:9090/notes');
 		Promise.all([folderReq, noteReq])
@@ -39,7 +43,10 @@ export default class App extends Component {
 		const contextValue = {
 			notes,
 			folders,
-			deleteNote: this.handleDeleteNote
+			deleteNote: this.handleDeleteNote,
+			fetchNotes: () => {
+				this.fetchNoteData();
+			}
 		};
 		return (
 			<div className="App">

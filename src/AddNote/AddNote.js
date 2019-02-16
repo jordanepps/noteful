@@ -42,7 +42,10 @@ export default class AddNote extends Component {
 			body: this.createJsonNoteObject({ name, content, folderId })
 		})
 			.then(res => res.json())
-			.then(this.props.history.push('/'));
+			.then(() => {
+				this.context.fetchNotes();
+				this.props.history.push('/');
+			});
 	}
 
 	createJsonNoteObject({ name, content, folderId }) {
