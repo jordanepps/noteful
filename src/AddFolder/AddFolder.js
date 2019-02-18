@@ -11,45 +11,67 @@ export default class AddFolder extends Component {
 		this.state = {
 			name: '',
 			nameValid: false,
-			validationMessage: ''
+			formValid: false,
+			validationMessage: '',
+			formValidationMessage: '',
+			successMessage: ''
 		};
 	}
 
 	handleFormSubmit(e) {
 		e.preventDefault();
-		// const name = this.state.name;
-		// fetch('http://localhost:9090/folders', {
-		// 	method: 'post',
-		// 	headers: {
-		// 		'content-type': 'application/json'
-		// 	},
-		// 	body: JSON.stringify({ name })
-		// }).then(res => console.log(res.json()));
+		if (this.state.formValid) {
+			const name = this.state.name;
+			fetch('http://localhost:9090/folders', {
+				method: 'post',
+				headers: {
+					'content-type': 'application/json'
+				},
+				body: JSON.stringify({ name })
+			})
+				.then(res => res.json())
+				.then(() => {
+					this.context.fetchNotes();
+					this.setState({ successMessage: 'Folder added successfully!' });
+					setTimeout(() => {
+						this.props.history.push('/');
+					}, 1500);
+				});
+		} else {
+			this.setState({ formValidationMessage: 'Please enter a folder name' });
+		}
 	}
 
-	titleCase(string) {
-		let splitStr = string.toLowerCase().split(' ');
-		//TODO: Create function that capitalizes the first word
-		return splitStr;
+	titleCase(str) {
+		return str.replace(
+			/\w\S*/g,
+			txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+		);
 	}
 
-	updateFolderName(name) {
-		const newName = this.titleCase(name);
-		console.log(newName);
+	updateFolderName(input) {
+		const name = this.titleCase(input);
 		this.setState({ name }, () => this.validateFolderName(name));
 	}
 
 	validateFolderName(name) {
 		let validationMessage = this.state.validationMessage;
 		let hasError = false;
-		// const currentFolders = this.getCurrentFolderNames();
-		//TODO:Check if an a folder exists with the same name
-		// console.log(currentFolders.find(folder => folder === name));
+		const currentFolders = this.getCurrentFolderNames();
+		const doesFolderExist = currentFolders.find(folder => folder === name);
 		if (name.length === 0) {
 			validationMessage = 'Folder name is required';
 			hasError = !hasError;
+		} else if (doesFolderExist) {
+			validationMessage = 'Folder name already exists. Please choose another';
+			hasError = !hasError;
 		}
-		this.setState({ validationMessage, nameValid: !hasError });
+		this.setState({
+			validationMessage,
+			nameValid: !hasError,
+			formValid: !hasError,
+			formValidationMessage: ''
+		});
 	}
 
 	getCurrentFolderNames() {
@@ -57,7 +79,13 @@ export default class AddFolder extends Component {
 	}
 
 	render() {
-		const { nameValid, validationMessage } = this.state;
+		const {
+			nameValid,
+			formValid,
+			validationMessage,
+			formValidationMessage,
+			successMessage
+		} = this.state;
 		this.getCurrentFolderNames();
 		return (
 			<div>
@@ -75,7 +103,12 @@ export default class AddFolder extends Component {
 						/>
 					</div>
 					<button type="submit">Add Folder</button>
+					<ValidationError
+						hasError={!formValid}
+						message={formValidationMessage}
+					/>
 				</form>
+				<div>{successMessage}</div>
 			</div>
 		);
 	}

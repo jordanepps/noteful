@@ -16,40 +16,47 @@ export default class AddNote extends Component {
 			bodyValid: false,
 			folderValid: false,
 			formValid: false,
+			successMessage: '',
 			validationMessages: {
 				name: '',
 				content: '',
-				folderId: ''
+				folderId: '',
+				form: ''
 			}
 		};
 	}
 
-	//TODO:Let user know if addNote was successful or not
 	//TODO:add a error catch if user submits with missing input
 
 	handleFormSubmit(e) {
 		e.preventDefault();
-		const { name, content, folderId } = this.state;
-		fetch('http://localhost:9090/notes', {
-			method: 'POST',
-			headers: {
-				'content-type': 'application/json'
-			},
-			body: this.createJsonNoteObject({ name, content, folderId })
-		})
-			// .then(() => {
-			// 	throw new Error('Something went wrong');
-			// })
-			.then(res => res.json())
-			.then(() => {
-				this.context.fetchNotes();
-				this.props.history.push('/');
+		const { name, content, folderId, formValid } = this.state;
+		if (formValid) {
+			fetch('http://localhost:9090/notes', {
+				method: 'POST',
+				headers: {
+					'content-type': 'application/json'
+				},
+				body: this.createJsonNoteObject({ name, content, folderId })
+			})
+				.then(res => res.json())
+				.then(() => {
+					this.context.fetchNotes();
+					this.setState({ successMessage: 'Note added successfully' });
+					setTimeout(() => {
+						this.props.history.push('/');
+					}, 1500);
+				});
+		} else {
+			this.setState({
+				validationMessages: { form: 'Please complete form and try again.' }
 			});
+		}
 	}
 
 	createJsonNoteObject({ name, content, folderId }) {
 		const newNote = {
-			// name,
+			name,
 			folderId,
 			content,
 			modified: this.updateModifiedTimeStamp()
@@ -72,6 +79,7 @@ export default class AddNote extends Component {
 
 	updateSelectedFolder(folderId) {
 		const validationMessages = this.state.validationMessages;
+		validationMessages.form = '';
 		validationMessages.folderId = 'Please select a folder';
 		folderId
 			? this.setState({ folderId, folderValid: true }, this.formValid)
@@ -80,6 +88,7 @@ export default class AddNote extends Component {
 
 	validateTitle(name) {
 		const validationMessages = this.state.validationMessages;
+		validationMessages.form = '';
 		let hasError = false;
 		if (name.length === 0) {
 			validationMessages.name = 'Title is required';
@@ -96,6 +105,7 @@ export default class AddNote extends Component {
 
 	validateBody(content) {
 		const validationMessages = this.state.validationMessages;
+		validationMessages.form = '';
 		let hasError = false;
 		if (content.length === 0) {
 			validationMessages.content = 'Body cannot be empty';
@@ -134,6 +144,8 @@ export default class AddNote extends Component {
 			titleValid,
 			bodyValid,
 			folderValid,
+			formValid,
+			successMessage,
 			validationMessages
 		} = this.state;
 		return (
@@ -179,7 +191,12 @@ export default class AddNote extends Component {
 					</div>
 
 					<button type="submit">Add Note</button>
+					<ValidationError
+						hasError={!formValid}
+						message={validationMessages.form}
+					/>
 				</form>
+				<div>{successMessage}</div>
 			</div>
 		);
 	}
