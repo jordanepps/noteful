@@ -5,10 +5,10 @@ import './NoteTab.css';
 import NotesContext from '../NotesContext';
 
 export default class NoteTab extends Component {
+	static contextType = NotesContext;
 	static defaultProps = {
 		note: {}
 	};
-	static contextType = NotesContext;
 
 	handleClickDelete(noteId) {
 		fetch(`http://localhost:9090/notes/${noteId}`, {
@@ -70,7 +70,7 @@ export default class NoteTab extends Component {
 				<h2>
 					<Link to={`/note/${note.id}`}>{note.name}</Link>
 				</h2>
-				<p>Date modified on {this.convertModifiedTimeStamp(note.modified)}</p>
+				<p>Last modified on {this.convertModifiedTimeStamp(note.modified)}</p>
 				<button onClick={() => this.handleClickDelete(note.id)}>
 					Delete Note
 				</button>
