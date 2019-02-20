@@ -26,8 +26,6 @@ export default class AddNote extends Component {
 		};
 	}
 
-	//TODO:add a error catch if user submits with missing input
-
 	handleFormSubmit(e) {
 		e.preventDefault();
 		const { name, content, folderId, formValid } = this.state;

@@ -20,10 +20,49 @@ export default class NoteTab extends Component {
 			.then(res => res.json())
 			.then(() => {
 				this.context.deleteNote(noteId);
-				this.props.handleDeleteNote();
+				this.props.handleRedirectToRoot();
 				this.context.fetchNotes();
 			});
 	}
+
+	convertModifiedTimeStamp(isoStr) {
+		const modified = new Date(isoStr);
+		const date = this.getOrdinalDate(modified.getDate());
+		const month = this.getMonthAbbr(modified.getMonth());
+		return `${date} ${month} ${modified.getFullYear()}`;
+	}
+
+	getOrdinalDate(d) {
+		if (d > 3 && d < 21) return `${d}th`;
+		switch (d % 10) {
+			case 1:
+				return `${d}st`;
+			case 2:
+				return `${d}nd`;
+			case 3:
+				return `${d}rd`;
+			default:
+				return `${d}th`;
+		}
+	}
+
+	getMonthAbbr(m) {
+		return [
+			'Jan',
+			'Feb',
+			'Mar',
+			'Apr',
+			'May',
+			'Jun',
+			'Jul',
+			'Aug',
+			'Sept',
+			'Oct',
+			'Nov',
+			'Dec'
+		][m];
+	}
+
 	render() {
 		const { note } = this.props;
 		return (
@@ -31,7 +70,7 @@ export default class NoteTab extends Component {
 				<h2>
 					<Link to={`/note/${note.id}`}>{note.name}</Link>
 				</h2>
-				<p>Date modified on: {note.modified}</p>
+				<p>Date modified on {this.convertModifiedTimeStamp(note.modified)}</p>
 				<button onClick={() => this.handleClickDelete(note.id)}>
 					Delete Note
 				</button>

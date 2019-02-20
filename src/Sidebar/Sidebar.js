@@ -11,14 +11,17 @@ export default class Sidebar extends Component {
 		currentFolder: null
 	};
 
-	render() {
-		const { folders } = this.context;
-		const tabs = folders.map(folder => (
+	renderFolderTabComponent(folders) {
+		return folders.map(folder => (
 			<FolderTab key={folder.id} id={folder.id} name={folder.name} />
 		));
+	}
+
+	render() {
+		const { folders } = this.context;
 		return (
 			<nav className="sidenav">
-				{tabs}
+				{this.renderFolderTabComponent(folders)}
 				<div>
 					<Link to="/add-folder">Add folder</Link>
 				</div>
