@@ -67,7 +67,15 @@ export default class AddNote extends Component {
 		return date.toISOString();
 	}
 
-	updateTitle(name) {
+	titleCase(str) {
+		return str.replace(
+			/\w\S*/g,
+			txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+		);
+	}
+
+	updateTitle(input) {
+		const name = this.titleCase(input);
 		this.setState({ name }, () => this.validateTitle(name));
 	}
 

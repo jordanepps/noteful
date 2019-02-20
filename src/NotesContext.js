@@ -4,7 +4,8 @@ const NotesContext = createContext({
 	notes: [],
 	folders: [],
 	deleteNote: () => {},
-	fetchNotes: () => {}
+	fetchNotes: () => {},
+	toTitleCase: () => {}
 });
 
 export default NotesContext;
