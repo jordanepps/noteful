@@ -71,6 +71,7 @@ export default class NoteTab extends Component {
 				<p>
 					Last modified on {this.convertModifiedTimeStamp(note.date_published)}
 				</p>
+				<button>Update Note</button>
 				<button onClick={() => this.handleClickDelete(note.id)}>
 					Delete Note
 				</button>
