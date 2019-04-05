@@ -9,18 +9,19 @@ export default class AddNote extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			name: '',
+			note_name: '',
 			content: '',
-			folderId: '',
+			folder_id: '',
+			author_id: 1,
 			titleValid: false,
 			bodyValid: false,
 			folderValid: false,
 			formValid: false,
 			successMessage: '',
 			validationMessages: {
-				name: '',
+				note_name: '',
 				content: '',
-				folderId: '',
+				folder_id: '',
 				form: ''
 			}
 		};
@@ -28,14 +29,19 @@ export default class AddNote extends Component {
 
 	handleFormSubmit(e) {
 		e.preventDefault();
-		const { name, content, folderId, formValid } = this.state;
+		const { note_name, content, folder_id, author_id, formValid } = this.state;
 		if (formValid) {
-			fetch('http://localhost:9090/notes', {
+			fetch('http://localhost:8000/api/notes', {
 				method: 'POST',
 				headers: {
 					'content-type': 'application/json'
 				},
-				body: this.createJsonNoteObject({ name, content, folderId })
+				body: this.createJsonNoteObject({
+					note_name,
+					content,
+					folder_id,
+					author_id
+				})
 			})
 				.then(res => res.json())
 				.then(() => {
@@ -52,12 +58,13 @@ export default class AddNote extends Component {
 		}
 	}
 
-	createJsonNoteObject({ name, content, folderId }) {
+	createJsonNoteObject({ note_name, content, folder_id, author_id }) {
 		const newNote = {
-			name,
-			folderId,
+			note_name,
+			folder_id,
 			content,
-			modified: this.updateModifiedTimeStamp()
+			author_id,
+			date_published: this.updateModifiedTimeStamp()
 		};
 		return JSON.stringify(newNote);
 	}
@@ -75,32 +82,32 @@ export default class AddNote extends Component {
 	}
 
 	updateTitle(input) {
-		const name = this.titleCase(input);
-		this.setState({ name }, () => this.validateTitle(name));
+		const note_name = this.titleCase(input);
+		this.setState({ note_name }, () => this.validateTitle(note_name));
 	}
 
 	updateBody(content) {
 		this.setState({ content }, () => this.validateBody(content));
 	}
 
-	updateSelectedFolder(folderId) {
+	updateSelectedFolder(folder_id) {
 		const validationMessages = this.state.validationMessages;
 		validationMessages.form = '';
-		validationMessages.folderId = 'Please select a folder';
-		folderId
-			? this.setState({ folderId, folderValid: true }, this.formValid)
+		validationMessages.folder_id = 'Please select a folder';
+		folder_id
+			? this.setState({ folder_id, folderValid: true }, this.formValid)
 			: this.setState({ folderValid: false, validationMessages });
 	}
 
-	validateTitle(name) {
+	validateTitle(note_name) {
 		const validationMessages = this.state.validationMessages;
 		validationMessages.form = '';
 		let hasError = false;
-		if (name.length === 0) {
-			validationMessages.name = 'Title is required';
+		if (note_name.length === 0) {
+			validationMessages.note_name = 'Title is required';
 			hasError = !hasError;
-		} else if (name.length < 3) {
-			validationMessages.name = 'Title has to be 3 or more characters';
+		} else if (note_name.length < 3) {
+			validationMessages.note_name = 'Title has to be 3 or more characters';
 			hasError = !hasError;
 		}
 		this.setState(
@@ -132,7 +139,7 @@ export default class AddNote extends Component {
 		} else {
 			options = folders.map(folder => (
 				<option key={folder.id} value={folder.id}>
-					{folder.name}
+					{folder.folder_name}
 				</option>
 			));
 			options.unshift(
@@ -158,15 +165,15 @@ export default class AddNote extends Component {
 			<div>
 				<form onSubmit={e => this.handleFormSubmit(e)}>
 					<div>
-						<label htmlFor="name">Note Title: </label>
+						<label htmlFor="note_name">Note Title: </label>
 						<input
 							type="text"
-							id="name"
+							id="note_name"
 							onChange={e => this.updateTitle(e.target.value)}
 						/>
 						<ValidationError
 							hasError={!titleValid}
-							message={validationMessages.name}
+							message={validationMessages.note_name}
 						/>
 					</div>
 
@@ -185,14 +192,14 @@ export default class AddNote extends Component {
 
 					<div>
 						<select
-							id="folderId"
+							id="folder_id"
 							onChange={e => this.updateSelectedFolder(e.target.value)}
 						>
 							{this.renderSelectOptions(folders)}
 						</select>
 						<ValidationError
 							hasError={!folderValid}
-							message={validationMessages.folderId}
+							message={validationMessages.folder_id}
 						/>
 					</div>
 

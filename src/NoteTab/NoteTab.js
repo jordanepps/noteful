@@ -11,18 +11,16 @@ export default class NoteTab extends Component {
 	};
 
 	handleClickDelete(noteId) {
-		fetch(`http://localhost:9090/notes/${noteId}`, {
+		fetch(`http://localhost:8000/api/notes/${noteId}`, {
 			method: 'DELETE',
 			headers: {
 				'content-type': 'application/json'
 			}
-		})
-			.then(res => res.json())
-			.then(() => {
-				this.context.deleteNote(noteId);
-				this.props.handleRedirectToRoot();
-				this.context.fetchNotes();
-			});
+		}).then(() => {
+			this.context.deleteNote(noteId);
+			this.props.handleRedirectToRoot();
+			this.context.fetchNotes();
+		});
 	}
 
 	convertModifiedTimeStamp(isoStr) {
@@ -68,9 +66,11 @@ export default class NoteTab extends Component {
 		return (
 			<div>
 				<h2>
-					<Link to={`/note/${note.id}`}>{note.name}</Link>
+					<Link to={`/note/${note.id}`}>{note.note_name}</Link>
 				</h2>
-				<p>Last modified on {this.convertModifiedTimeStamp(note.modified)}</p>
+				<p>
+					Last modified on {this.convertModifiedTimeStamp(note.date_published)}
+				</p>
 				<button onClick={() => this.handleClickDelete(note.id)}>
 					Delete Note
 				</button>

@@ -13,7 +13,7 @@ export default class Sidebar extends Component {
 
 	renderFolderTabComponent(folders) {
 		return folders.map(folder => (
-			<FolderTab key={folder.id} id={folder.id} name={folder.name} />
+			<FolderTab key={folder.id} id={folder.id} name={folder.folder_name} />
 		));
 	}
 

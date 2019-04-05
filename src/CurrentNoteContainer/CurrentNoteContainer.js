@@ -18,7 +18,7 @@ export default class CurrentNoteContainer extends Component {
 
 	renderNoteData(notes, history) {
 		const currentNote = notes.find(
-			note => note.id === this.props.currentNoteId
+			note => note.id === Number(this.props.currentNoteId)
 		);
 		const element = currentNote ? (
 			<Fragment>

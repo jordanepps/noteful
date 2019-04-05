@@ -21,8 +21,8 @@ export default class App extends Component {
 	}
 
 	fetchNoteData() {
-		const folderReq = fetch('http://localhost:9090/folders');
-		const noteReq = fetch('http://localhost:9090/notes');
+		const folderReq = fetch('http://localhost:8000/api/folders');
+		const noteReq = fetch('http://localhost:8000/api/notes');
 		Promise.all([folderReq, noteReq])
 			.then(responses => Promise.all(responses.map(res => res.json())))
 			.then(([folders, notes]) =>

@@ -9,7 +9,7 @@ export default class AddFolder extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			name: '',
+			folder_name: '',
 			nameValid: false,
 			formValid: false,
 			validationMessage: '',
@@ -21,13 +21,14 @@ export default class AddFolder extends Component {
 	handleFormSubmit(e) {
 		e.preventDefault();
 		if (this.state.formValid) {
-			const name = this.state.name;
-			fetch('http://localhost:9090/folders', {
+			const folder_name = this.state.folder_name;
+			console.log(JSON.stringify({ folder_name }));
+			fetch('http://localhost:8000/api/folders', {
 				method: 'post',
 				headers: {
 					'content-type': 'application/json'
 				},
-				body: JSON.stringify({ name })
+				body: JSON.stringify({ folder_name })
 			})
 				.then(res => res.json())
 				.then(() => {
@@ -50,8 +51,8 @@ export default class AddFolder extends Component {
 	}
 
 	updateFolderName(input) {
-		const name = this.titleCase(input);
-		this.setState({ name }, () => this.validateFolderName(name));
+		const folder_name = this.titleCase(input);
+		this.setState({ folder_name }, () => this.validateFolderName(folder_name));
 	}
 
 	validateFolderName(name) {

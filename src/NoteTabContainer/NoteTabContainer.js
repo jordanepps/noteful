@@ -29,7 +29,7 @@ export default class NoteTabContainer extends Component {
 	}
 
 	filterNoteTabs(note) {
-		return note.folderId === this.props.currentFolder;
+		return note.folder_id === Number(this.props.currentFolder);
 	}
 
 	renderNoteTabComponents(currentFolder, notes, history) {
