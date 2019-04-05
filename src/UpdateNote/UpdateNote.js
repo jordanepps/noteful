@@ -14,9 +14,11 @@ export default class UpdateNote extends Component {
 			folder_id: '',
 			nameValid: false,
 			contentValid: false,
+			folderValid: false,
 			validationMessages: {
 				note_name: '',
 				content: '',
+				folder_id: '',
 				form: ''
 			}
 		};
@@ -98,14 +100,45 @@ export default class UpdateNote extends Component {
 		);
 	}
 
+	renderSelectOptions(folders) {
+		let options;
+		if (folders.length === 0) {
+			options = <option value="">Loading...</option>;
+		} else {
+			options = folders.map(folder => (
+				<option key={folder.id} value={folder.id}>
+					{folder.folder_name}
+				</option>
+			));
+			options.unshift(
+				<option key="select" value="">
+					Select a folder...
+				</option>
+			);
+		}
+		return options;
+	}
+
+	updateSelectedFolder(folder_id) {
+		const validationMessages = this.state.validationMessages;
+		validationMessages.form = '';
+		validationMessages.folder_id = 'Please select a folder';
+		folder_id
+			? this.setState({ folder_id, folderValid: true }, this.formValid)
+			: this.setState({ folderValid: false, validationMessages });
+	}
+
 	getCurrentNote() {}
 
 	render() {
+		const { folders } = this.context;
 		const {
 			note_name,
 			content,
+			folder_id,
 			nameValid,
 			contentValid,
+			folderValid,
 			validationMessages
 		} = this.state;
 		return (
@@ -137,6 +170,20 @@ export default class UpdateNote extends Component {
 						<ValidationError
 							hasError={!contentValid}
 							message={validationMessages.content}
+						/>
+					</div>
+
+					<div>
+						<select
+							id="folder_id"
+							value={folder_id}
+							onChange={e => this.updateSelectedFolder(e.target.value)}
+						>
+							{this.renderSelectOptions(folders)}
+						</select>
+						<ValidationError
+							hasError={!folderValid}
+							message={validationMessages.folder_id}
 						/>
 					</div>
 				</form>
