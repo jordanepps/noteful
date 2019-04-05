@@ -12,9 +12,13 @@ export default class UpdateNote extends Component {
 			note_name: '',
 			content: '',
 			folder_id: '',
-			nameValid: false,
-			contentValid: false,
-			folderValid: false,
+			author_id: 1,
+			nameValid: true,
+			contentValid: true,
+			folderValid: true,
+			formValid: false,
+			noteUpdated: false,
+			successMessage: '',
 			validationMessages: {
 				note_name: '',
 				content: '',
@@ -27,33 +31,89 @@ export default class UpdateNote extends Component {
 	componentDidMount() {
 		const currentNoteId = Number(this.props.match.params.noteId);
 
-		if (!this.context.notes.length) {
-			fetch(`http://localhost:8000/api/notes/${currentNoteId}`)
-				.then(res => res.json())
-				.then(note => {
-					this.setState({
-						note_name: note.note_name,
-						content: note.content,
-						folder_id: note.folder_id
-					});
-				})
-				.catch(err => {
-					console.log(err);
+		this.context.notes.length
+			? this.getCurrentNoteFromContext(currentNoteId)
+			: this.fetchCurrentNote(currentNoteId);
+	}
+
+	fetchCurrentNote(noteId) {
+		fetch(`http://localhost:8000/api/notes/${noteId}`)
+			.then(res => res.json())
+			.then(note => {
+				this.setState({
+					note_name: note.note_name,
+					content: note.content,
+					folder_id: note.folder_id
 				});
-		} else {
-			const currentNote = this.context.notes.find(
-				note => note.id === currentNoteId
-			);
-			this.setState({
-				note_name: currentNote.note_name,
-				content: currentNote.content,
-				folder_id: currentNote.folder_id
+			})
+			.catch(err => {
+				console.log(err);
 			});
-		}
+	}
+
+	getCurrentNoteFromContext(noteId) {
+		const currentNote = this.context.notes.find(note => note.id === noteId);
+		this.setState({
+			note_name: currentNote.note_name,
+			content: currentNote.content,
+			folder_id: currentNote.folder_id
+		});
 	}
 
 	handleFormSubmit(e) {
 		e.preventDefault();
+		const {
+			note_name,
+			content,
+			folder_id,
+			author_id,
+			noteUpdated,
+			formValid
+		} = this.state;
+		if (formValid) {
+			fetch(
+				`http://localhost:8000/api/notes/${this.props.match.params.noteId}`,
+				{
+					method: 'PATCH',
+					headers: { 'content-type': 'application/json' },
+					body: this.createJsonNoteObject({
+						note_name,
+						content,
+						folder_id,
+						author_id
+					})
+				}
+			).then(() => {
+				this.context.fetchNotes();
+				this.setState({ successMessage: 'Note updated successfully' });
+				setTimeout(() => {
+					this.props.history.push('/');
+				}, 1500);
+			});
+		} else {
+			const msg = noteUpdated
+				? 'Please complete form and try again.'
+				: 'Please update the note.';
+			this.setState({
+				validationMessages: { form: `${msg}` }
+			});
+		}
+	}
+
+	createJsonNoteObject({ note_name, content, folder_id, author_id }) {
+		const newNote = {
+			note_name,
+			folder_id,
+			content,
+			author_id,
+			date_published: this.updateModifiedTimeStamp()
+		};
+		return JSON.stringify(newNote);
+	}
+
+	updateModifiedTimeStamp() {
+		const date = new Date();
+		return date.toISOString();
 	}
 
 	titleCase(str) {
@@ -65,7 +125,10 @@ export default class UpdateNote extends Component {
 
 	updateNoteName(input) {
 		const note_name = this.titleCase(input);
-		this.setState({ note_name }, this.validateNoteName(note_name));
+		this.setState(
+			{ note_name, noteUpdated: true },
+			this.validateNoteName(note_name)
+		);
 	}
 
 	validateNoteName(note_name) {
@@ -83,7 +146,9 @@ export default class UpdateNote extends Component {
 	}
 
 	updateContent(content) {
-		this.setState({ content }, () => this.validateContent(content));
+		this.setState({ content, noteUpdated: true }, () =>
+			this.validateContent(content)
+		);
 	}
 
 	validateContent(content) {
@@ -124,11 +189,17 @@ export default class UpdateNote extends Component {
 		validationMessages.form = '';
 		validationMessages.folder_id = 'Please select a folder';
 		folder_id
-			? this.setState({ folder_id, folderValid: true }, this.formValid)
+			? this.setState(
+					{ folder_id, folderValid: true, noteUpdated: true },
+					this.formValid
+			  )
 			: this.setState({ folderValid: false, validationMessages });
 	}
 
-	getCurrentNote() {}
+	formValid() {
+		const { nameValid, contentValid, folderValid } = this.state;
+		this.setState({ formValid: nameValid && contentValid && folderValid });
+	}
 
 	render() {
 		const { folders } = this.context;
@@ -139,7 +210,9 @@ export default class UpdateNote extends Component {
 			nameValid,
 			contentValid,
 			folderValid,
-			validationMessages
+			formValid,
+			validationMessages,
+			successMessage
 		} = this.state;
 		return (
 			<div>
@@ -186,7 +259,13 @@ export default class UpdateNote extends Component {
 							message={validationMessages.folder_id}
 						/>
 					</div>
+					<button type="submit">Update Note</button>
+					<ValidationError
+						hasError={!formValid}
+						message={validationMessages.form}
+					/>
 				</form>
+				<div>{successMessage}</div>
 			</div>
 		);
 	}
