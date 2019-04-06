@@ -234,9 +234,11 @@ export default class UpdateNote extends Component {
 
 					<div>
 						<label htmlFor="content">Note Body: </label>
-						<input
-							type="text"
+						<textarea
+							name="content"
 							id="content"
+							cols="30"
+							rows="10"
 							value={content}
 							onChange={e => this.updateContent(e.target.value)}
 						/>

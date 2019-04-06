@@ -58,6 +58,8 @@ export default class AddNote extends Component {
 		}
 	}
 
+	//TODO:Show success message on the home page for update and new note
+
 	createJsonNoteObject({ note_name, content, folder_id, author_id }) {
 		const newNote = {
 			note_name,
