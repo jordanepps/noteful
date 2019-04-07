@@ -26,6 +26,7 @@ export default class AddFolder extends Component {
 			fetch('http://localhost:8000/api/folders', {
 				method: 'post',
 				headers: {
+					Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
 					'content-type': 'application/json'
 				},
 				body: JSON.stringify({ folder_name })

@@ -14,6 +14,7 @@ export default class NoteTab extends Component {
 		fetch(`http://localhost:8000/api/notes/${noteId}`, {
 			method: 'DELETE',
 			headers: {
+				Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
 				'content-type': 'application/json'
 			}
 		}).then(() => {

@@ -37,7 +37,12 @@ export default class UpdateNote extends Component {
 	}
 
 	fetchCurrentNote(noteId) {
-		fetch(`http://localhost:8000/api/notes/${noteId}`)
+		fetch(`http://localhost:8000/api/notes/${noteId}`, {
+			method: 'get',
+			headers: {
+				Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`
+			}
+		})
 			.then(res => res.json())
 			.then(note => {
 				this.setState({
@@ -75,7 +80,10 @@ export default class UpdateNote extends Component {
 				`http://localhost:8000/api/notes/${this.props.match.params.noteId}`,
 				{
 					method: 'PATCH',
-					headers: { 'content-type': 'application/json' },
+					headers: {
+						Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
+						'content-type': 'application/json'
+					},
 					body: this.createJsonNoteObject({
 						note_name,
 						content,

@@ -22,8 +22,18 @@ export default class App extends Component {
 	}
 
 	fetchNoteData() {
-		const folderReq = fetch('http://localhost:8000/api/folders');
-		const noteReq = fetch('http://localhost:8000/api/notes');
+		const folderReq = fetch('http://localhost:8000/api/folders', {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`
+			}
+		});
+		const noteReq = fetch('http://localhost:8000/api/notes', {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`
+			}
+		});
 		Promise.all([folderReq, noteReq])
 			.then(responses => Promise.all(responses.map(res => res.json())))
 			.then(([folders, notes]) =>
