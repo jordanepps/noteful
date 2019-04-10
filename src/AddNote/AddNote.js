@@ -35,6 +35,7 @@ export default class AddNote extends Component {
 			fetch(`${config.API_ENDPOINT}/api/notes`, {
 				method: 'POST',
 				headers: {
+					Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
 					'content-type': 'application/json'
 				},
 				body: this.createJsonNoteObject({
