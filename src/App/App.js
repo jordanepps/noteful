@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import './App.css';
 
+import config from '../config';
 import NotesContext from '../NotesContext';
 import Heading from '../Heading/Heading';
 import HomePage from '../HomePage/HomePage';
@@ -22,13 +23,13 @@ export default class App extends Component {
 	}
 
 	fetchNoteData() {
-		const folderReq = fetch('http://localhost:8000/api/folders', {
+		const folderReq = fetch(`${config.API_ENDPOINT}/api/folders`, {
 			method: 'GET',
 			headers: {
 				Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`
 			}
 		});
-		const noteReq = fetch('http://localhost:8000/api/notes', {
+		const noteReq = fetch(`${config.API_ENDPOINT}/api/notes`, {
 			method: 'GET',
 			headers: {
 				Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`

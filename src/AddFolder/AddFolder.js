@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './AddFolder.css';
-
+import config from '../config';
 import NotesContext from '../NotesContext';
 import ValidationError from '../ValidationError/ValidationError';
 
@@ -23,7 +23,7 @@ export default class AddFolder extends Component {
 		if (this.state.formValid) {
 			const folder_name = this.state.folder_name;
 			console.log(JSON.stringify({ folder_name }));
-			fetch('http://localhost:8000/api/folders', {
+			fetch(`${config.API_ENDPOINT}/api/folders`, {
 				method: 'post',
 				headers: {
 					Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,

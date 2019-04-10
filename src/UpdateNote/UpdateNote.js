@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './UpdateNote.css';
 
+import config from '../config';
 import NotesContext from '../NotesContext';
 import ValidationError from '../ValidationError/ValidationError';
 
@@ -37,7 +38,7 @@ export default class UpdateNote extends Component {
 	}
 
 	fetchCurrentNote(noteId) {
-		fetch(`http://localhost:8000/api/notes/${noteId}`, {
+		fetch(`${config.API_ENDPOINT}/api/notes/${noteId}`, {
 			method: 'get',
 			headers: {
 				Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`

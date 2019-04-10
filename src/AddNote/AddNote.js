@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './AddNote.css';
 
+import config from '../config';
 import NotesContext from '../NotesContext';
 import ValidationError from '../ValidationError/ValidationError';
 
@@ -31,7 +32,7 @@ export default class AddNote extends Component {
 		e.preventDefault();
 		const { note_name, content, folder_id, author_id, formValid } = this.state;
 		if (formValid) {
-			fetch('http://localhost:8000/api/notes', {
+			fetch(`${config.API_ENDPOINT}/api/notes`, {
 				method: 'POST',
 				headers: {
 					'content-type': 'application/json'

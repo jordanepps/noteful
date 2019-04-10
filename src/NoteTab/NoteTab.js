@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './NoteTab.css';
 
+import config from '../config';
 import NotesContext from '../NotesContext';
 
 export default class NoteTab extends Component {
@@ -11,7 +12,7 @@ export default class NoteTab extends Component {
 	};
 
 	handleClickDelete(noteId) {
-		fetch(`http://localhost:8000/api/notes/${noteId}`, {
+		fetch(`${config.API_ENDPOINT}/api/notes/${noteId}`, {
 			method: 'DELETE',
 			headers: {
 				Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
